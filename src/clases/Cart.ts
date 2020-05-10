@@ -33,13 +33,13 @@ export default class Cart implements iCart {
 
   addDetail(detail: CartDetail) {
     const mapDetails = this.mapDetails;
-    const existingDetail = mapDetails.get(detail.id);
+    let existingDetail = mapDetails.get(detail.id);
     if (!existingDetail) {
-      mapDetails.set(detail.id, detail);
+      existingDetail = detail;
     } else {
       existingDetail.quantity += detail.quantity;
-      mapDetails.set(detail.id, existingDetail);
     }
+    mapDetails.set(detail.id, existingDetail);
     this.mapDetails = mapDetails;
     this.details = Array.from(this.mapDetails.values());
     this.reCalculateValues();

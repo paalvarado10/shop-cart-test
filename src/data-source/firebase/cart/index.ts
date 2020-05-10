@@ -54,12 +54,7 @@ export class FirebaseCart extends CartDataSource {
         await this.updateCart(cart);
         return cart;
     }
-    const newCart = new Cart(storeId, 0,0);
-    await firebase.collection('carts').doc(`${storeId}`).set({
-      storeId: newCart.storeId,
-      subtotal: newCart.subtotal,
-      total: newCart.total
-    })
+    const newCart = await this.createCart(storeId);
     return newCart
   }
 
@@ -80,5 +75,21 @@ export class FirebaseCart extends CartDataSource {
       subtotal: cart.subtotal,
       total: cart.total
     })
+  }
+
+  async createCart(storeId: number, total: number = 0, subtotal: number = 0) {
+    const newCart = new Cart(storeId, total,subtotal);
+    await firebase.collection('carts').doc(`${storeId}`).set({
+      storeId: newCart.storeId,
+      subtotal: newCart.subtotal,
+      total: newCart.total
+    })
+    return newCart
+  }
+
+  async deleteCart(cart: Cart) {
+    console.info(`Deleting cart ${cart.storeId}`);
+    await firebase.collection('carts').doc(`${cart.storeId}`).delete();
+    console.info(`Cart ${cart.storeId} deleted`);
   }
 };

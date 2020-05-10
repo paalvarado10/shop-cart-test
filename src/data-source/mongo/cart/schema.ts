@@ -17,7 +17,6 @@ const CartDetailSchema = new mongoose.Schema({
   boxTotalDiscounted: Number,
   boxSubtotalDiscounted: Number
 });
-
 const CartDetailModel = mongoose.model('CartDetail', CartDetailSchema, 'cartDetail');
 
 const CartSchema = new mongoose.Schema({
@@ -25,8 +24,21 @@ const CartSchema = new mongoose.Schema({
   total: Number,
   subtotal: Number,
   details: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'cartDetail'
+    id: String,
+    name: String,
+    thumb: String,
+    sku: String,
+    parentSku: String,
+    isBox: Boolean,
+    quantity: Number,
+    total: Number,
+    subtotal: Number,
+    totalDiscounted: Number,
+    subtotalDiscounted: Number,
+    boxTotal: Number,
+    boxSubtotal: Number,
+    boxTotalDiscounted: Number,
+    boxSubtotalDiscounted: Number
   }],
   totalDiscounted: Number,
   subtotalDiscounted: Number
@@ -34,4 +46,4 @@ const CartSchema = new mongoose.Schema({
 
 const CartModel = mongoose.model('Cart', CartSchema);
 
-export { CartModel, CartDetailModel };
+export { CartModel, CartDetailModel, CartDetailSchema };

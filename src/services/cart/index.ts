@@ -9,18 +9,12 @@ async function get(storeId: number): Promise<Cart> {
 }
 
 async function update(
-  storeId: number,
-  detailId: string,
-  quantity: number,
-  add: boolean = true,
-  name?: string,
-  thumb?: string,
-  sku?: string,
-  total?: number,
-  subtotal?: number,
-  isBox?: boolean
+  storeId:number, adetail: iCartDetail, add: boolean
 ): Promise<Cart> {
   const cart = await cartRepository.getCart(storeId);
+  console.log('here all ready got')
+  const { id: detailId, name, thumb, sku, quantity, total, subtotal, isBox } = adetail;
+  let allReadyUpdated = false;
   for (const detail of cart.details) {
     if (detail.id === detailId) {
       const d = detail.returnAvailableValues();
@@ -28,7 +22,8 @@ async function update(
         detailId,
         name || d.name,
         thumb || d.thumb,
-        sku || d.sku, quantity,
+        sku || d.sku, 
+        quantity,
         total || d.total,
         subtotal || d.subtotal,
         isBox || d.isBox
@@ -39,7 +34,15 @@ async function update(
       } else {
         cart.subtractDetail(newDetail);
       }
+      allReadyUpdated = true;
+      break;
     }
+  }
+  if (!allReadyUpdated && add) {
+    const newDetail = new CartDetail(
+      detailId, name, thumb, sku, quantity, total, subtotal, isBox
+    );
+    cart.addDetail(newDetail);
   }
   await cartRepository.updateCart(cart);
   return cart;
