@@ -1,9 +1,10 @@
 import Cart from "../../clases/Cart";
 import CartDetail from "../../clases/CartDetail";
-import { updateCart, getCart } from "../../data-source/firebase/cart";
+import { CartRepository } from "../../repositories/cart/index";
+const cartRepository = new CartRepository();
 
 async function get(storeId: number): Promise<Cart> {
-  const cart = await getCart(storeId);
+  const cart = await cartRepository.getCart(storeId);
   return cart;
 }
 
@@ -19,7 +20,7 @@ async function update(
   subtotal?: number,
   isBox?: boolean
 ): Promise<Cart> {
-  const cart = await getCart(storeId);
+  const cart = await cartRepository.getCart(storeId);
   for (const detail of cart.details) {
     if (detail.id === detailId) {
       const d = detail.returnAvailableValues();
@@ -40,7 +41,7 @@ async function update(
       }
     }
   }
-  await updateCart(cart);
+  await cartRepository.updateCart(cart);
   return cart;
 }
 

@@ -18,5 +18,9 @@ const fire = {
   clientC509CertUrl: process.env.FIREBASE_CLIENT_CERT
 };
 
-export { fire };
+const mongo = {
+  uri: process.env.MONGO_URI
+}
+
+export { fire, mongo };
 
